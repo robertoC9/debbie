@@ -1,0 +1,441 @@
+:root{
+  --bg:#0E0E0D;
+  --surface:#161615;
+  --line: rgba(255,255,255,0.12);
+  --text:#F1EFE8;
+  --text-muted:#9A9994;
+  --accent:#FF4D6D;
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter', system-ui, sans-serif;
+}
+
+/* Nav */
+.nav{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 26px 48px;
+  position:relative;
+  z-index:5;
+}
+.logo{ font-family:'Bebas Neue'; font-size:26px; letter-spacing:2px; }
+.nav-links{ display:flex; gap:32px; font-size:13px; }
+.nav-links a{
+  color:var(--text-muted);
+  text-decoration:none;
+  transition: color 0.15s ease;
+}
+.nav-links a:hover{ color:var(--text); }
+
+/* Hero */
+.hero{
+  position:relative;
+  overflow:hidden;
+  min-height: 560px;
+  display:flex;
+  align-items:flex-end;
+  margin: 0 24px;
+  border-radius: 4px;
+}
+.hero video{
+  position:absolute;
+  top:50%; left:50%;
+  min-width:100%; min-height:100%;
+  width:auto; height:auto;
+  transform: translate(-50%,-50%);
+  object-fit:cover;
+  z-index:0;
+}
+.hero-overlay{
+  position:absolute; inset:0; z-index:1;
+  background: linear-gradient(180deg, rgba(14,14,13,0.15) 0%, rgba(14,14,13,0.55) 55%, rgba(14,14,13,0.92) 100%);
+}
+.hero-portrait{
+  position:absolute;
+  z-index:2;
+right:48px;
+  bottom:60px;
+  height: 78%;
+  max-height: 420px;
+  width:auto;
+  object-fit:cover;
+  border-radius: 4px;
+  opacity: 1;
+  transition: opacity 0.6s ease;
+}
+.hero-portrait-mobile{
+  display:none;
+}
+.hero-content{ position:relative; z-index:3; padding: 48px; max-width: 560px; }
+.eyebrow{
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:3px;
+  color:var(--accent);
+  text-transform:uppercase;
+  margin-bottom:16px;
+}
+.headline{
+  font-family:'Bebas Neue';
+  font-size:64px;
+  line-height:0.95;
+  letter-spacing:0.5px;
+  margin-bottom:20px;
+  color:var(--text);
+}
+.sub{
+  font-size:15px;
+  color:var(--text-muted);
+  max-width:400px;
+  margin-bottom:30px;
+  line-height:1.65;
+}
+.cta{
+  background:transparent;
+  color:var(--text);
+  border:1px solid var(--text);
+  border-radius:2px;
+  padding:13px 30px;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  cursor:pointer;
+  font-family:'Inter';
+  transition: all 0.15s ease;
+}
+.cta:hover{ background:var(--text); color:var(--bg); }
+
+/* Posts */
+.section-label{
+  padding: 56px 48px 24px;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:2px;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  border-top:1px solid var(--line);
+  margin-top: 8px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap:1px;
+  background:var(--line);
+  margin: 0 47px 8px;
+}
+.card{ background:var(--bg); padding: 0 0 28px; }
+.thumb{
+  width:100%;
+  aspect-ratio: 4/3;
+  background:var(--surface);
+  margin-bottom:20px;
+  position:relative;
+  overflow:hidden;
+}
+.thumb-video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.thumb::after{
+  content:'';
+  position:absolute; inset:0;
+  background: linear-gradient(135deg, transparent 60%, rgba(255,77,109,0.15) 100%);
+}
+.card-body{ padding: 0 24px; }
+.tag{
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:1.5px;
+  color:var(--accent);
+  margin-bottom:10px;
+  text-transform:uppercase;
+}
+.title{ font-family:'Bebas Neue'; font-size:22px; letter-spacing:0.5px; color:var(--text); }
+
+/* Newsletter */
+.newsletter{
+  text-align:center;
+  padding: 64px 32px 72px;
+  border-top:1px solid var(--line);
+  margin-top: 24px;
+}
+.newsletter h2{ font-family:'Bebas Neue'; font-size:30px; letter-spacing:1px; margin-bottom:8px; }
+.newsletter p{ font-size:14px; color:var(--text-muted); margin-bottom:26px; }
+.form{
+  display:flex;
+  max-width: 360px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--line);
+}
+.form input{
+  flex:1;
+  background:transparent;
+  border:none;
+  padding: 12px 4px;
+  font-size:14px;
+  color:var(--text);
+  font-family:'Inter';
+  outline:none;
+}
+.form input::placeholder{ color:var(--text-muted); }
+.form button{
+  background:transparent;
+  border:none;
+  color:var(--accent);
+  font-weight:600;
+  font-size:13px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  cursor:pointer;
+  font-family:'Inter';
+  padding: 0 4px;
+}
+
+/* Footer */
+footer{
+  text-align:center;
+  padding: 56px 24px 28px;
+  border-top:1px solid var(--line);
+}
+.footer-logo{
+  width: 58%;
+  max-width: 480px;
+  height:auto;
+  margin: 0 auto 20px;
+  display:block;
+}
+footer p{ font-size:12px; color:var(--text-muted); }
+
+/* Responsive */
+
+/* Tablet */
+@media (max-width: 1024px){
+  .nav{ padding: 22px 32px; }
+  .hero{ margin: 0 16px; }
+  .hero-content{ padding: 40px; }
+  .headline{ font-size:52px; }
+  .hero-portrait{ right: 36px; max-height: 360px; }
+  .grid{ grid-template-columns: repeat(2, minmax(0,1fr)); margin: 0 31px 8px; }
+  .section-label{ padding: 48px 32px 20px; }
+  .footer-logo{ width: 66%; }
+}
+
+/* Móvil */
+@media (max-width: 640px){
+  .footer-logo{ width: 72%; }
+  .nav{ padding: 18px 20px; }
+  .nav-links{ display:none; }
+  .logo{ font-size:22px; }
+
+.hero{
+    margin: 0 12px;
+    min-height: 340px;
+    display:block;
+    padding-bottom: 40px;
+  }
+  .hero video{ position:absolute; }
+  .hero-overlay{ position:absolute; }
+  .hero-content{
+    position:relative;
+    z-index:3;
+    padding: 40px 20px 0;
+    max-width:100%;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .headline{ font-size:44px; }
+  .sub{ margin:0 auto 26px; }
+
+  /* Foto visible en móvil, debajo del h1 */
+  .hero-portrait{ display:none; }
+  .hero-portrait-mobile{
+    display:block;
+    width: 70%;
+    max-width: 320px;
+    height:auto;
+    border-radius: 4px;
+    margin: 8px auto 24px;
+  }
+
+  .grid{ grid-template-columns: 1fr; margin: 0 31px 8px; }
+  .section-label{ padding: 40px 20px 16px; }
+  .newsletter{ padding: 48px 20px 56px; }
+  .form{ max-width: 100%; }
+  footer{ padding: 44px 20px 24px; }
+}
+
+/* Móvil pequeño */
+@media (max-width: 400px){
+  .headline{ font-size:36px; }
+  .hero-portrait-mobile{ width: 80%; }
+  .form button{ font-size:12px; }
+}
+
+/* ===== Botón de autenticación en nav ===== */
+.cta-small{
+  padding: 8px 18px;
+  font-size: 11px;
+}
+
+/* ===== Conversaciones con Débora ===== */
+.chat-section{
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 24px 64px;
+  border-top: 1px solid var(--line);
+  margin-top: 24px;
+}
+.chat-header{
+  text-align:center;
+  margin-bottom: 24px;
+}
+.chat-header h2{ font-family:'Bebas Neue'; font-size:30px; letter-spacing:1px; margin-bottom:8px; }
+.chat-header p{ font-size:14px; color:var(--text-muted); margin-bottom:16px; }
+.chat-box{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius: 6px;
+  min-height: 260px;
+  max-height: 420px;
+  overflow-y:auto;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.chat-empty{
+  color:var(--text-muted);
+  font-size:14px;
+  text-align:center;
+  padding: 60px 0;
+}
+.chat-msg{
+  display:flex;
+  justify-content:flex-end;
+  margin-bottom: 12px;
+}
+.chat-bubble{
+  background:var(--accent);
+  color:#fff;
+  padding: 10px 14px;
+  border-radius: 14px 14px 2px 14px;
+  max-width: 80%;
+  font-size:14px;
+  line-height:1.5;
+}
+.chat-time{
+  display:block;
+  font-size:11px;
+  opacity:0.75;
+  margin-top:6px;
+}
+.chat-form{
+  display:flex;
+  gap: 10px;
+  align-items:flex-end;
+}
+.chat-form textarea{
+  flex:1;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:12px;
+  color:var(--text);
+  font-family:'Inter';
+  font-size:14px;
+  resize:none;
+  outline:none;
+}
+.chat-form textarea::placeholder{ color:var(--text-muted); }
+.chat-form button{
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  padding: 12px 22px;
+  font-weight:600;
+  font-size:13px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  cursor:pointer;
+  font-family:'Inter';
+  white-space:nowrap;
+}
+.chat-form button:hover{ opacity:0.9; }
+
+/* ===== Modal de autenticación ===== */
+.club-modal{
+  background:var(--surface);
+  color:var(--text);
+  border:1px solid var(--line);
+  border-radius:8px;
+}
+.club-modal .modal-header{
+  border-bottom:1px solid var(--line);
+  padding: 18px 22px;
+}
+.club-modal .modal-title{
+  font-family:'Bebas Neue';
+  letter-spacing:1px;
+  font-size:22px;
+}
+.club-modal .modal-body{ padding: 24px; }
+.club-input{
+  background:transparent;
+  border:1px solid var(--line);
+  border-radius:4px;
+  color:var(--text);
+  font-family:'Inter';
+  padding: 12px 14px;
+}
+.club-input:focus{
+  background:transparent;
+  color:var(--text);
+  border-color:var(--accent);
+  box-shadow:none;
+}
+.club-input::placeholder{ color:var(--text-muted); }
+.club-btn{
+  background:var(--accent);
+  border:none;
+  color:#fff;
+  font-weight:600;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  font-size:13px;
+  padding: 12px;
+  border-radius:4px;
+}
+.club-btn:hover{ background:#e63e5c; color:#fff; }
+.auth-msg{
+  margin-top: 14px;
+  font-size:13px;
+  text-align:center;
+  min-height: 18px;
+}
+.auth-switch{
+  margin-top: 16px;
+  font-size:13px;
+  color:var(--text-muted);
+  text-align:center;
+}
+.auth-switch a{ color:var(--accent); text-decoration:none; }
+.auth-switch a:hover{ text-decoration:underline; }
+
+/* Responsive para chat */
+@media (max-width: 640px){
+  .chat-section{ padding: 32px 16px 48px; }
+  .chat-form{ flex-direction:column; }
+  .chat-form button{ width:100%; }
+  .cta-small{ padding: 6px 12px; font-size:10px; }
+}

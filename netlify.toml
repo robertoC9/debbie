@@ -1,0 +1,13 @@
+# Configuración de despliegue para Netlify
+# Despliega el frontend estático. El backend (register/login/mensajes)
+# depende de una base de datos local (postgres) que Netlify no puede alcanzar.
+
+[build]
+  publish = "frontend"
+
+# Redirigir todas las rutas a index.html (SPA fallback)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
