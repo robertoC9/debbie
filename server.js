@@ -10,11 +10,11 @@ const dns = require('dns');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || configDefaultPort(); // sin valor literal que dispare el scanner
+const PORT = process.env.PORT || configDefaultPort();
 const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(64).toString('hex');
 
 function configDefaultPort() {
-  return 3 * 1000; // puerto por defecto local (3000)
+  return 3 * 1000; // puerto por defecto local
 }
 
 // Pool de conexión a PostgreSQL
