@@ -1,13 +1,19 @@
 # Configuración de despliegue para Netlify
-# Despliega el frontend estático. El backend (register/login/mensajes)
-# depende de una base de datos local (postgres) que Netlify no puede alcanzar.
+# Publica el frontend estático y expone el backend como Netlify Functions
+# (register/login/mensajes) conectado a una PostgreSQL en la nube.
 
 [build]
   publish = "frontend"
+  functions = "netlify/functions"
 
-# Redirigir todas las rutas a index.html (SPA fallback)
+# Redirigir las rutas /api/* a las funciones serverless
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# Redirigir todas las demás rutas a index.html (SPA fallback)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-

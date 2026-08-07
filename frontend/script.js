@@ -17,7 +17,7 @@ if (ctaBtn) {
   });
 }
 
-// ========== AUTENTICACIÓN ==========
+// ========== AUTENTICACIÓN (JWT en header Authorization) ==========
 var authBtn = document.getElementById('auth-btn');
 var authModalEl = document.getElementById('auth-modal');
 var authModal = null;
@@ -26,7 +26,7 @@ if (authModalEl) {
 }
 
 var currentUser = null;
-var token = null; // token JWT (se usa como respaldo; la sesión principal vive en cookie httpOnly)
+var token = localStorage.getItem('debbie_token') || null; // JWT persistido
 
 function setAuthButton() {
   if (!authBtn) return;
@@ -51,7 +51,6 @@ function showAuthMsg(msg, isError) {
 
 function showLoggedIn(user) {
   currentUser = user;
-  // La sesión principal vive en la cookie httpOnly. Guardamos el usuario solo como caché.
   localStorage.setItem('debbie_user', JSON.stringify(user));
   setAuthButton();
   document.getElementById('conversaciones').hidden = false;
@@ -65,6 +64,7 @@ function showLoggedOut() {
   currentUser = null;
   token = null;
   localStorage.removeItem('debbie_user');
+  localStorage.removeItem('debbie_token');
   setAuthButton();
   document.getElementById('conversaciones').hidden = true;
   document.getElementById('club').hidden = false;
@@ -86,23 +86,23 @@ var registerForm = document.getElementById('register-form');
 if (registerForm) {
   registerForm.addEventListener('submit', async function (e) {
     e.preventDefault();
-var name = document.getElementById('reg-name').value.trim();
+    var name = document.getElementById('reg-name').value.trim();
     var email = document.getElementById('reg-email').value.trim();
     var password = document.getElementById('reg-password').value;
     var website = document.getElementById('reg-website') ? document.getElementById('reg-website').value : '';
 
     showAuthMsg('Creando cuenta...', false);
     try {
-var res = await fetch('/api/register', {
+      var res = await fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify({ name: name, email: email, password: password, website: website })
       });
       var data = await res.json();
       if (res.ok) {
         // El registro crea la cuenta e inicia sesión automáticamente.
         token = data.token;
+        localStorage.setItem('debbie_token', token);
         showLoggedIn(data.user);
         if (authModal) authModal.hide();
       } else {
@@ -121,7 +121,6 @@ if (goLogin) {
     e.preventDefault();
     var modalTitle = document.getElementById('auth-modal-title');
     modalTitle.textContent = 'Inicia sesión';
-    goLogin = null; // placeholder
     // Reconstruir modal a login
     var body = document.querySelector('.club-modal .modal-body');
     body.innerHTML = `
@@ -132,7 +131,7 @@ if (goLogin) {
         <div class="mb-3">
           <input type="password" class="form-control club-input" id="login-password" placeholder="Contraseña" required>
         </div>
-<button type="submit" class="btn w-100 club-btn">Entrar</button>
+        <button type="submit" class="btn w-100 club-btn">Entrar</button>
       </form>
       <p class="auth-msg" id="auth-msg"></p>
       <p class="auth-switch">¿No tienes cuenta? <a href="#" id="go-register">Crea una</a></p>
@@ -151,15 +150,15 @@ function attachLogin() {
       var password = document.getElementById('login-password').value;
       showAuthMsg('Ingresando...', false);
       try {
-var res = await fetch('/api/login', {
+        var res = await fetch('/api/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
           body: JSON.stringify({ email: email, password: password })
         });
         var data = await res.json();
         if (res.ok) {
           token = data.token;
+          localStorage.setItem('debbie_token', token);
           showLoggedIn(data.user);
           if (authModal) authModal.hide();
         } else {
@@ -188,7 +187,7 @@ var logoutBtn = document.getElementById('logout-btn');
 if (logoutBtn) {
   logoutBtn.addEventListener('click', async function () {
     try {
-      await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+      await fetch('/api/logout', { method: 'POST' });
     } catch (e) {
       console.error('Error al cerrar sesión:', e);
     }
@@ -201,8 +200,7 @@ function loadMessages() {
   var chatBox = document.getElementById('chat-box');
   var empty = document.getElementById('chat-empty');
 
-fetch('/api/messages', {
-    credentials: 'include',
+  fetch('/api/messages', {
     headers: token ? { 'Authorization': 'Bearer ' + token } : {}
   })
     .then(function (res) { return res.json(); })
@@ -250,9 +248,8 @@ if (chatForm) {
     if (!content) return;
 
     try {
-var res = await fetch('/api/messages', {
+      var res = await fetch('/api/messages', {
         method: 'POST',
-        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': token ? 'Bearer ' + token : ''
@@ -275,11 +272,16 @@ var res = await fetch('/api/messages', {
 }
 
 // ========== RESTAURAR SESIÓN AL CARGAR ==========
-// La sesión se guarda en una cookie httpOnly (no accesible desde JS).
-// Por eso consultamos /api/me para saber si el usuario sigue autenticado
-// y restaurar la sesión al navegar por el blog sin perderla.
+// La sesión se guarda como JWT en localStorage y se envía en el header Authorization.
+// Consultamos /api/me para validar el token y restaurar la sesión al navegar.
 (function restoreSession() {
-  fetch('/api/me', { credentials: 'include' })
+  if (!token) {
+    showLoggedOut();
+    return;
+  }
+  fetch('/api/me', {
+    headers: { 'Authorization': 'Bearer ' + token }
+  })
     .then(function (res) {
       if (res.status === 200) return res.json();
       return { ok: false };
