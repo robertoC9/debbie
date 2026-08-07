@@ -6,6 +6,14 @@
   publish = "frontend"
   functions = "netlify/functions"
 
+[build.environment]
+  # PORT no es un secreto: es un número de puerto común (solo se usa para el
+  # servidor Express local, no en producción). Su valor coincide con cadenas
+  # que aparecen de forma natural en el repo, así que el secrets scanning lo
+  # marcaba como filtración y hacía fallar el build. Lo excluimos del escaneo.
+  # DATABASE_URL y JWT_SECRET SÍ son secretos y se siguen escaneando.
+  SECRETS_SCAN_OMIT_KEYS = "PORT"
+
 # Redirigir las rutas /api/* a las funciones serverless
 [[redirects]]
   from = "/api/*"
