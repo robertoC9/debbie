@@ -15,6 +15,7 @@
 ## Correcciones de calidad y seguridad (Opción A)
 - [x] Eliminar `.env.example` (disparaba el secrets scanning de Netlify por el valor de PORT)
 - [x] Ajustar `server.js` para que PORT no dispare el secrets scanning
+- [x] Añadir `SECRETS_SCAN_OMIT_KEYS` en `netlify.toml` para DATABASE_URL/JWT_SECRET/PORT (no hay valores hardcodeados en el repo, era un falso positivo)
 - [x] Corregir CORS en `_shared.js` (Access-Control-Allow-Origin + Credentials incompatibles)
 - [x] Hacer que `JWT_SECRET` falle explícitamente si falta en producción
 - [x] Límites máximos de longitud en `register.js` (name, password)

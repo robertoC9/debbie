@@ -6,6 +6,14 @@
   publish = "frontend"
   functions = "netlify/functions"
 
+[build.environment]
+  # DATABASE_URL, JWT_SECRET and PORT are only ever read via process.env in
+  # server-side code (Netlify Functions / local server.js) and are never
+  # written into repo files or the published frontend. Netlify's secrets
+  # scanner still flags their configured values as a false positive, so we
+  # exempt these keys from scanning per https://ntl.fyi/configure-secrets-scanning
+  SECRETS_SCAN_OMIT_KEYS = "DATABASE_URL,JWT_SECRET,PORT"
+
 # Redirigir las rutas /api/* a las funciones serverless
 [[redirects]]
   from = "/api/*"
