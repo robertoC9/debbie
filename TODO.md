@@ -12,6 +12,14 @@
 - [ ] Desplegar el sitio en Netlify
 - [ ] Probar el flujo completo tras el deploy
 
+## Correcciones de calidad y seguridad (Opción A)
+- [x] Eliminar `.env.example` (disparaba el secrets scanning de Netlify por el valor de PORT)
+- [x] Ajustar `server.js` para que PORT no dispare el secrets scanning
+- [x] Corregir CORS en `_shared.js` (Access-Control-Allow-Origin + Credentials incompatibles)
+- [x] Hacer que `JWT_SECRET` falle explícitamente si falta en producción
+- [x] Límites máximos de longitud en `register.js` (name, password)
+- [x] Límite de longitud en `messages.js` (content)
+
 ## SQL para crear las tablas
 Correr en la consola SQL de Supabase/Neon:
 

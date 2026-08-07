@@ -30,8 +30,11 @@ exports.handler = async (event) => {
         return fail('Solicitud inválida.', 400);
       }
       const { content } = body;
-      if (!content || !content.trim()) {
+      if (typeof content !== 'string' || !content.trim()) {
         return fail('El mensaje no puede estar vacío.', 400);
+      }
+      if (content.trim().length > 1000) {
+        return fail('El mensaje no puede superar los 1000 caracteres.', 400);
       }
       const result = await pool.query(
         'INSERT INTO messages (user_id, content) VALUES ($1, $2) RETURNING id, content, created_at',

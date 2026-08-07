@@ -20,15 +20,31 @@ function getPool() {
   return pool;
 }
 
-// JWT_SECRET estable: si falta en producción, generamos uno estable por sesión.
-// IMPORTANTE: en Netlify debe configurarse JWT_SECRET como variable de entorno.
-const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(64).toString('hex');
+// JWT_SECRET: en producción DEBE estar configurado como variable de entorno.
+// Si falta, la app falla explícitamente en lugar de generar uno aleatorio
+// (un secreto aleatorio por cold start invalidaría todos los tokens).
+if (!process.env.JWT_SECRET) {
+  console.error('JWT_SECRET no está configurado. Configúralo en las variables de entorno de Netlify.');
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('JWT_SECRET is required in production.');
+  }
+}
+const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-insecure-secret';
+
+// Cabeceras CORS. Usamos JWT en header 'Authorization', NO cookies,
+// por lo que NO enviamos Access-Control-Allow-Credentials (incompatible
+// con Access-Control-Allow-Origin: * y rechazado por los navegadores).
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
+};
 
 // ========== Utilidades de respuesta ==========
 function ok(data, statusCode) {
   return {
     statusCode: statusCode || 200,
-    headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true },
+    headers: CORS_HEADERS,
     body: JSON.stringify(data)
   };
 }
@@ -36,7 +52,7 @@ function ok(data, statusCode) {
 function fail(message, statusCode) {
   return {
     statusCode: statusCode || 400,
-    headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true },
+    headers: CORS_HEADERS,
     body: JSON.stringify({ ok: false, message: message })
   };
 }

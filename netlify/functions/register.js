@@ -41,11 +41,17 @@ exports.handler = async (event) => {
   if (!name.trim() || name.trim().length < 2) {
     return fail('Escribe un nombre válido (mín. 2 caracteres).', 400);
   }
+  if (name.length > 50) {
+    return fail('El nombre no puede superar los 50 caracteres.', 400);
+  }
   if (!isValidEmail(email)) {
     return fail('Correo inválido o de un dominio temporal.', 400);
   }
   if (password.length < 6) {
     return fail('La contraseña debe tener al menos 6 caracteres.', 400);
+  }
+  if (password.length > 72) {
+    return fail('La contraseña no puede superar los 72 caracteres.', 400);
   }
 
   try {
