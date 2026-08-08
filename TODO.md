@@ -20,6 +20,10 @@
 - [x] Límites máximos de longitud en `register.js` (name, password)
 - [x] Límite de longitud en `messages.js` (content)
 
+## Posts del blog
+- [x] Reescribir `netlify/functions/getPosts.js` para usar PostgreSQL (vía `_shared.js`) en lugar de Supabase
+- [ ] Conectar el frontend para mostrar los posts desde `/api/getPosts`
+
 ## SQL para crear las tablas
 Correr en la consola SQL de Supabase/Neon:
 
@@ -39,8 +43,20 @@ CREATE TABLE IF NOT EXISTS messages (
   content TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT now()
 );
+
+CREATE TABLE IF NOT EXISTS posts (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  excerpt TEXT,
+  slug VARCHAR(255) UNIQUE NOT NULL,
+  published BOOLEAN DEFAULT false,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
 ```
 
 ## Variables de entorno en Netlify
 - `DATABASE_URL` = connection string de Supabase/Neon
 - `JWT_SECRET` = clave secreta aleatoria larga
+
