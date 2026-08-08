@@ -22,6 +22,8 @@
 
 ## Posts del blog
 - [x] Reescribir `netlify/functions/getPosts.js` para usar PostgreSQL (vía `_shared.js`) en lugar de Supabase
+- [x] Commit y push de `getPosts.js` y `TODO.md` a origin/main
+- [ ] Crear la tabla `posts` en la base de datos (ver SQL abajo)
 - [ ] Conectar el frontend para mostrar los posts desde `/api/getPosts`
 
 ## SQL para crear las tablas
